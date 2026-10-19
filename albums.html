@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a0f1c">
+  <title>My Albums - Gallery</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="albums.css">
+  <link rel="stylesheet" href="viewer.css">
+  <script src="theme.js"></script>
+</head>
+<body>
+
+  <div class="app-frame">
+
+    <!-- ===== Header ===== -->
+    <header class="app-header">
+      <a href="dashboard.html" class="header-btn" aria-label="Back">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </a>
+
+      <div class="header-title">
+        <h1>My Albums</h1>
+        <p id="albumCountText">0 albums</p>
+      </div>
+
+      <button class="header-btn" id="newAlbumBtn" aria-label="New Album">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+    </header>
+
+    <!-- ===== Content ===== -->
+    <main class="albums-layout">
+
+      <!-- Empty state -->
+      <div class="albums-empty" id="albumsEmpty">
+        <div class="empty-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </div>
+        <h2>No albums yet</h2>
+        <p>Tap the <b>+</b> button above to create your first album</p>
+        <button class="empty-create-btn" id="emptyCreateBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Create Album
+        </button>
+      </div>
+
+      <!-- Albums grid -->
+      <div class="albums-grid" id="albumsGrid"></div>
+
+    </main>
+
+    <!-- ===== New Album Modal ===== -->
+    <div class="modal-overlay" id="albumModal">
+      <div class="modal-box">
+        <h2>New Album</h2>
+        <p class="modal-sub">Give your album a name</p>
+
+        <input type="text" id="albumNameInput" placeholder="e.g. Vacation 2026" maxlength="30" autocomplete="off">
+
+        <div class="modal-actions">
+          <button class="modal-btn cancel" id="modalCancelBtn">Cancel</button>
+          <button class="modal-btn create" id="modalCreateBtn">Create</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Album Viewer (full-screen) ===== -->
+    <div class="album-viewer" id="albumViewer">
+      <div class="viewer-header">
+        <button class="viewer-back" id="viewerBackBtn" aria-label="Back">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+
+        <div class="viewer-title">
+          <h2 id="viewerAlbumName">Album</h2>
+          <p id="viewerAlbumCount">0 / 100 images</p>
+        </div>
+
+        <button class="viewer-add" id="viewerAddBtn" aria-label="Add Images">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="viewer-body" id="viewerBody">
+        <!-- Images injected via JS -->
+      </div>
+    </div>
+
+    <!-- Hidden inputs -->
+    <input type="file" id="albumImageInput" accept="image/*" multiple hidden>
+
+  </div>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = 'https://zaamobmupaxkjkarsaa.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphYWFtb2JtdXBheGtqa2Fyc2FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NTAyNzksImV4cCI6MjEwNDQyNjI3OX0.KuWLQ9NLLqJn_V3s6js9bWu-uDi3g3A_IBWy1hU2K7M';
+    window.supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+  </script>
+  <script src="viewer.js"></script>
+  <script src="albums.js"></script>
+</body>
+</html>

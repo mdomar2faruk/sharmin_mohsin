@@ -1,0 +1,410 @@
+/* ===== Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  background: #0a0a0a;
+  color: #fff;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.gallery-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  z-index: 20;
+  flex-shrink: 0;
+}
+
+.gallery-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ccff00;
+  letter-spacing: 0.3px;
+  text-align: center;
+  flex: 1;
+  padding: 0 12px;
+}
+
+.back-btn,
+.upload-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.back-btn:hover,
+.upload-btn:hover {
+  background: rgba(204, 255, 0, 0.15);
+  border-color: rgba(204, 255, 0, 0.4);
+  color: #ccff00;
+}
+
+.back-btn svg,
+.upload-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.upload-btn {
+  background: linear-gradient(135deg, #ccff00, #a3e635);
+  color: #0a0a0a;
+  border: none;
+  box-shadow: 0 4px 16px rgba(204, 255, 0, 0.3);
+}
+
+.upload-btn:hover {
+  background: linear-gradient(135deg, #d9ff33, #b4ee4a);
+  color: #0a0a0a;
+  transform: scale(1.05);
+}
+
+/* =========================================================
+   STAGE (3D COVERFLOW CONTAINER)
+   ========================================================= */
+.stage-container {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 3D Perspective */
+  perspective: 1400px;
+  -webkit-perspective: 1400px;
+  perspective-origin: 50% 50%;
+
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 70%);
+
+  /* Prevent scroll bounce on touch */
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.stage-container.dragging {
+  cursor: grabbing;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Card ===== */
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  /* Size - will be overridden for mobile */
+  width: 320px;
+  height: 420px;
+  margin-left: -160px;
+  margin-top: -210px;
+
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* Reflection / shine */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    transparent 30%,
+    transparent 70%,
+    rgba(0, 0, 0, 0.25) 100%
+  );
+  pointer-events: none;
+  border-radius: 18px;
+}
+
+/* ===== State classes ===== */
+.card.active {
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85),
+              0 0 40px rgba(204, 255, 0, 0.15);
+  z-index: 100;
+}
+
+.card.no-transition {
+  transition: none !important;
+}
+
+/* ===== Empty State ===== */
+.empty-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 30px;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+.empty-state.hidden {
+  display: none;
+}
+
+.empty-icon {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(204, 255, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.empty-icon svg {
+  width: 42px;
+  height: 42px;
+  color: #ccff00;
+}
+
+.empty-state h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.empty-state p {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 24px;
+  max-width: 280px;
+}
+
+.empty-upload-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ccff00, #a3e635);
+  border: none;
+  border-radius: 50px;
+  color: #0a0a0a;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 6px 20px rgba(204, 255, 0, 0.3);
+}
+
+.empty-upload-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(204, 255, 0, 0.45);
+}
+
+.empty-upload-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* =========================================================
+   BOTTOM BAR
+   ========================================================= */
+.bottom-bar {
+  position: relative;
+  z-index: 20;
+  padding: 14px 20px;
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+/* Dots */
+.dots {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  min-height: 20px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.dot.active {
+  background: #ccff00;
+  width: 24px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(204, 255, 0, 0.6);
+}
+
+/* Buttons */
+.play-pause,
+.clear-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.play-pause:hover {
+  background: rgba(204, 255, 0, 0.15);
+  color: #ccff00;
+  border-color: rgba(204, 255, 0, 0.4);
+}
+
+.clear-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.play-pause svg,
+.clear-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 768px) {
+  .card {
+    width: 240px;
+    height: 340px;
+    margin-left: -120px;
+    margin-top: -170px;
+    border-radius: 16px;
+  }
+
+  .gallery-title {
+    font-size: 16px;
+  }
+
+  .back-btn,
+  .upload-btn {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-header {
+    padding: 12px 14px;
+  }
+
+  .gallery-title {
+    font-size: 15px;
+  }
+
+  .card {
+    width: 200px;
+    height: 290px;
+    margin-left: -100px;
+    margin-top: -145px;
+  }
+
+  .bottom-bar {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .play-pause,
+  .clear-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-height: 600px) {
+  .card {
+    width: 180px;
+    height: 260px;
+    margin-left: -90px;
+    margin-top: -130px;
+  }
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a0f1c">
+  <title>Edit Profile - Gallery</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="profile.css">
+  <script src="theme.js"></script>
+</head>
+<body>
+
+  <div class="app-frame">
+
+    <!-- ===== Header ===== -->
+    <header class="app-header">
+      <a href="dashboard.html" class="header-btn" aria-label="Back">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </a>
+
+      <div class="header-title">
+        <h1>Edit Profile</h1>
+        <p>Update your info</p>
+      </div>
+
+      <button class="header-btn" data-theme-toggle aria-label="Toggle theme">
+        <span class="theme-icon"></span>
+      </button>
+    </header>
+
+    <!-- ===== Content ===== -->
+    <main class="profile-layout">
+
+      <!-- Avatar Preview -->
+      <div class="profile-hero">
+        <div class="avatar-preview" id="avatarPreview">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <button class="avatar-camera-btn" id="avatarBtn" aria-label="Change Photo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </button>
+        </div>
+        <p class="avatar-hint">Tap to change your photo</p>
+      </div>
+
+      <!-- Form -->
+      <form class="profile-form" id="profileForm">
+        <div class="form-group">
+          <label for="profileName">Display Name</label>
+          <input type="text" id="profileName" placeholder="Enter your name" maxlength="30" autocomplete="off" required>
+        </div>
+
+        <div class="form-group">
+          <label for="profileBio">Bio <span class="optional">(optional)</span></label>
+          <textarea id="profileBio" placeholder="Tell something about yourself..." maxlength="120" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="save-btn" id="saveBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          <span>Save Changes</span>
+        </button>
+      </form>
+
+      <input type="file" id="avatarInput" accept="image/*" hidden>
+
+    </main>
+
+  </div>
+
+  <script src="profile.js"></script>
+</body>
+</html>
